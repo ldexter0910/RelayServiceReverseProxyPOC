@@ -1,4 +1,5 @@
 require('dotenv').config();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; //Disables certificate verification
 
 const WebSocket = require('hyco-ws');
 const readline = require('readline')
@@ -12,9 +13,13 @@ const path = process.env.HybridConnectionName;
 const keyrule = process.env.SASKeyName;
 const key = process.env.SASKeyValue;
 
+const uri = WebSocket.createRelaySendUri(ns, path);
+// const proxiedAddr = WebSocket.createRelaySendUri("localhost", path);
+const token = WebSocket.createRelayToken(uri, keyrule, key);
+
 WebSocket.relayedConnect(
-    WebSocket.createRelaySendUri(ns, path),
-    WebSocket.createRelayToken('http://' + ns, keyrule, key),
+    uri,
+    token,
     function (wss) {
         readline.on('line', (input) => {
             wss.send(input, null);

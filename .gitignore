@@ -1,4 +1,7 @@
 node_modules/
-*/.env
+**/*.env
 listener-client/.env
 sender-client/.env
+
+rev-proxy-sender/localhost.crt
+rev-proxy-sender/localhost.key
